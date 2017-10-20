@@ -1,5 +1,5 @@
 var restify = require('restify');
-var products = require('./product');
+var products = require('./product.js');
 var port = process.env.port || 3000;
 
 var server = restify.createServer({
@@ -15,11 +15,11 @@ server.use(function (req, res, next) {
 server.use(restify.plugins.bodyParser());
 
 //create router
-server.get('api/products', products.get);
-server.get('api/products/:id', products.getById);
-server.post('api/products', products.post);
-server.put('api/products/:id', products.putById);
-server.del('api/products/:id', products.deleteById);
+server.get('api/products', products.productsController.get);
+server.get('api/products/:id', products.productsController.getById);
+server.post('api/products', products.productsController.post);
+server.put('api/products/:id', products.productsController.putById);
+server.del('api/products/:id', products.productsController.deleteById);
 
 //ser the listen post of server
 server.listen(port, function () {
