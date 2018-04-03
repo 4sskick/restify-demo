@@ -1,8 +1,9 @@
 var path = require('path');
 var restify = require('restify');
 var products = require('./product.js');
+// var router = require('./routes/index')
 var swaggerJSDoc = require('swagger-jsdoc');
-var port = process.env.port || 3000;
+var port = process.env.PORT || 3000;
 
 var server = restify.createServer({
     name: "simple restify server"
@@ -16,7 +17,7 @@ var swaggerDefinition = {
         description: 'Demonstrating how to describe a RESTful API with Swagger',
     },
     host: 'localhost:3000',
-    basePath: '/public',
+    basePath: '/',
 };
 
 // options for the swagger docs
@@ -36,15 +37,15 @@ server.use(function (req, res, next) {
     return next();
 });
 
-//serve static folder
-server.get('/api-docs', restify.plugins.serveStatic({
-    directory: __dirname + '/public',
-    default: 'index.html'
-}));
-
 server.use(restify.plugins.bodyParser());
 
 //create router
+//serve static folder
+server.get('/api-docs', restify.plugins.serveStatic({
+    directory: '/public',
+    default: 'index.html'
+}));
+
 server.get('/swagger.json', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
@@ -86,5 +87,5 @@ server.del('api/products/:id', products.productsController.deleteById);
 
 //ser the listen post of server
 server.listen(port, function () {
-    console.log("listening to port: " + port);
+    console.log(`listening to port: ${port}`);
 });
